@@ -1,558 +1,1090 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  ArrowRight,
+  Sparkles,
+  Code2,
+  Smartphone,
+  Palette,
+  Megaphone,
+  Bot,
+  Briefcase,
+  Cloud,
+  PenTool,
+  Zap,
+  ShieldCheck,
+  Cpu,
+  Headphones,
+  Layers,
+  Rocket,
+  Check,
+  Star,
+  Sun,
+  Moon,
+  Menu,
+  X,
+  Twitter,
+  Linkedin,
+  Github,
+  Mail,
+  Phone,
+  MapPin,
+  ChevronUp,
+  CircleDot,
+  TrendingUp,
+  Users,
+  Award,
+  Building2,
+  MessageSquare,
+  Send,
+} from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "StartBusiness.ltd — Manage Everything. From One Place." },
+      { title: "Nova — Launch, Scale & Grow Your Business Digitally" },
       {
         name: "description",
         content:
-          "From leads to invoices, calls to social media — manage everything your business needs from a single, intelligent dashboard.",
-      },
-      { property: "og:title", content: "StartBusiness.ltd — Manage Everything. From One Place." },
-      {
-        property: "og:description",
-        content: "All-in-one business management SaaS with 6 modules and AI built in.",
-      },
-    ],
-    links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=DM+Sans:wght@400;500;600;700&display=swap",
+          "Nova is a premium digital agency helping startups launch, scale and grow with world-class web, product, branding and AI services.",
       },
     ],
   }),
   component: Index,
 });
 
-const CSS = `
-:root{
-  --bg:#ffffff;
-  --ink:#0e1424;
-  --ink-2:#1a2238;
-  --muted:#5b6478;
-  --line:#ececf2;
-  --soft:#fafbff;
+/* ---------------- DATA ---------------- */
 
-  --coral:#ff7a6b;     --coral-soft:#ffece8;
-  --sky:#4aa8ff;       --sky-soft:#e6f2ff;
-  --mint:#3fc79a;      --mint-soft:#e2f7ee;
-  --lavender:#9b7cff;  --lavender-soft:#efe9ff;
-  --peach:#ffb072;     --peach-soft:#fff0de;
-  --sage:#7bb39a;      --sage-soft:#e6f1eb;
-  --rose:#ff8db1;      --rose-soft:#ffe7ef;
-
-  --dark:#0b1023;
-  --serif:'Fraunces', ui-serif, Georgia, serif;
-  --sans:'DM Sans', ui-sans-serif, system-ui, sans-serif;
-}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
-a{color:inherit;text-decoration:none}
-img{max-width:100%}
-.container{max-width:1200px;margin:0 auto;padding:0 24px}
-h1,h2,h3,h4{font-family:var(--serif);font-weight:700;letter-spacing:-0.02em;color:var(--ink);margin:0}
-p{color:var(--muted);line-height:1.65;margin:0}
-
-/* NAV */
-.nav{position:sticky;top:0;z-index:50;transition:all .3s ease;background:transparent}
-.nav.scrolled{background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(16px);-webkit-backdrop-filter:saturate(180%) blur(16px);border-bottom:1px solid rgba(15,23,42,.06)}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px;gap:24px}
-.brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:800;font-size:21px;letter-spacing:-0.02em}
-.brand .logo{width:32px;height:32px;border-radius:10px;background:conic-gradient(from 200deg,var(--coral),var(--lavender),var(--sky),var(--mint),var(--coral));box-shadow:0 6px 18px -8px rgba(155,124,255,.6)}
-.brand span{color:var(--lavender)}
-.nav-links{display:flex;gap:30px}
-.nav-links a{font-size:14.5px;color:var(--muted);font-weight:500;transition:color .2s}
-.nav-links a:hover{color:var(--ink)}
-.nav-cta{display:flex;gap:10px;align-items:center}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:999px;font-weight:600;font-size:14.5px;cursor:pointer;border:1px solid transparent;transition:transform .2s ease, box-shadow .25s ease, background .2s, border-color .2s;font-family:var(--sans)}
-.btn-primary{background:var(--coral);color:#fff}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(255,122,107,.55)}
-.btn-dark{background:var(--ink);color:#fff}
-.btn-dark:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(15,23,42,.5)}
-.btn-ghost{background:#fff;color:var(--ink);border-color:var(--line)}
-.btn-ghost:hover{border-color:var(--ink)}
-.btn-lav{background:var(--lavender);color:#fff}
-.btn-lav:hover{transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(155,124,255,.55)}
-.hamburger{display:none;background:none;border:none;cursor:pointer;padding:6px;flex-direction:column;gap:5px}
-.hamburger span{width:22px;height:2px;background:var(--ink);border-radius:2px;display:block}
-.mob{display:none}
-@media (max-width:880px){
-  .nav-links,.nav-cta .btn{display:none}
-  .nav-cta .btn-primary{display:inline-flex}
-  .hamburger{display:flex}
-  .mob.open{display:block;position:absolute;top:72px;left:0;right:0;background:#fff;border-bottom:1px solid var(--line);padding:18px 24px;box-shadow:0 20px 40px -20px rgba(0,0,0,.12)}
-  .mob a{display:block;padding:12px 0;font-weight:500;color:var(--ink-2);border-bottom:1px solid var(--line)}
-  .mob a:last-child{border-bottom:none}
-}
-
-/* HERO */
-.hero{position:relative;padding:80px 0 70px;overflow:hidden}
-.hero::before{content:"";position:absolute;top:-160px;right:-160px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,var(--lavender-soft),transparent 70%);z-index:0}
-.hero::after{content:"";position:absolute;bottom:-180px;left:-140px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,var(--coral-soft),transparent 70%);z-index:0}
-.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:60px;align-items:center}
-@media (max-width:980px){.hero-grid{grid-template-columns:1fr;gap:50px}}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--lavender);background:var(--lavender-soft);padding:7px 14px;border-radius:999px}
-.hero h1{font-size:clamp(40px,6.2vw,72px);line-height:1.02;margin:18px 0 18px}
-.hero h1 em{font-style:italic;color:var(--coral);font-weight:600}
-.hero p.lead{font-size:18px;max-width:580px}
-.hero-cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
-.proof{display:flex;align-items:center;gap:12px;margin-top:26px;color:var(--muted);font-size:14px}
-.dots{display:flex}
-.dots span{width:28px;height:28px;border-radius:50%;border:2px solid #fff;margin-left:-8px;display:inline-block}
-.dots span:nth-child(1){background:var(--coral);margin-left:0}
-.dots span:nth-child(2){background:var(--sky)}
-.dots span:nth-child(3){background:var(--mint)}
-.dots span:nth-child(4){background:var(--lavender)}
-
-/* Dashboard mock */
-.dash-wrap{position:relative}
-.dash{position:relative;background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 40px 80px -30px rgba(15,23,42,.25),0 8px 20px -10px rgba(15,23,42,.06);animation:float 6s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-.dash-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.dash-head .dot{width:10px;height:10px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 4px rgba(63,199,154,.18)}
-.dash-title{font-weight:700;font-size:14px;color:var(--ink)}
-.dash-sub{font-size:12px;color:var(--muted)}
-.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.metric{padding:16px;border-radius:16px;border:1px solid var(--line);background:#fff}
-.metric.coral{background:var(--coral-soft)}
-.metric.sky{background:var(--sky-soft)}
-.metric.mint{background:var(--mint-soft)}
-.metric.lav{background:var(--lavender-soft)}
-.metric .k{font-size:12px;color:var(--muted);font-weight:600}
-.metric .v{font-family:var(--serif);font-size:24px;font-weight:700;margin-top:6px;color:var(--ink)}
-.metric .d{font-size:11px;font-weight:600;margin-top:4px;color:var(--mint)}
-.bars{margin-top:14px;display:flex;gap:6px;align-items:flex-end;height:80px;padding:14px;border-radius:14px;background:linear-gradient(180deg,#fbf9ff,#fff);border:1px solid var(--line)}
-.bars span{flex:1;background:linear-gradient(180deg,var(--lavender),#c8b8ff);border-radius:6px;opacity:.9}
-.bars span:nth-child(3n){background:linear-gradient(180deg,var(--coral),#ffb6ad)}
-.bars span:nth-child(4n){background:linear-gradient(180deg,var(--sky),#a8d5ff)}
-.floaty{position:absolute;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 18px 40px -16px rgba(15,23,42,.2);font-size:13px;font-weight:600;color:var(--ink-2);z-index:2}
-.floaty.a{top:-18px;left:-20px;animation:float 5s ease-in-out infinite}
-.floaty.b{bottom:-18px;right:-14px;animation:float 7s ease-in-out infinite reverse}
-.pill-ico{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:14px}
-
-/* SECTION */
-section{padding:100px 0;position:relative}
-.section-head{text-align:center;max-width:720px;margin:0 auto 60px}
-.section-head h2{font-size:clamp(32px,4.4vw,52px);line-height:1.08}
-.section-head h2 em{font-style:italic;color:var(--coral);font-weight:600}
-.section-head p{margin-top:14px;font-size:17px}
-
-/* MODULES */
-.modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px}
-.mod{position:relative;background:#fff;border:1px solid var(--line);border-radius:22px;padding:30px;overflow:hidden;transition:transform .3s ease, box-shadow .3s ease}
-.mod:hover{transform:translateY(-8px);box-shadow:0 30px 60px -25px rgba(15,23,42,.16)}
-.mod::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:var(--accent)}
-.mod .num{font-family:var(--serif);font-size:13px;color:var(--muted);font-weight:600;letter-spacing:.18em}
-.mod .ico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--soft-c);color:var(--accent);font-size:22px;margin:14px 0 18px}
-.mod h3{font-size:22px;margin-bottom:10px}
-.mod p{font-size:14px;margin-bottom:18px}
-.tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;background:var(--soft-c);color:var(--accent)}
-
-.mod.lav{--accent:var(--lavender);--soft-c:var(--lavender-soft)}
-.mod.sky{--accent:var(--sky);--soft-c:var(--sky-soft)}
-.mod.peach{--accent:var(--peach);--soft-c:var(--peach-soft)}
-.mod.coral{--accent:var(--coral);--soft-c:var(--coral-soft)}
-.mod.mint{--accent:var(--mint);--soft-c:var(--mint-soft)}
-.mod.sage{--accent:var(--sage);--soft-c:var(--sage-soft)}
-
-/* HOW IT WORKS */
-.how-wrap{background:linear-gradient(180deg,#fff,var(--lavender-soft) 60%, #fff)}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;position:relative}
-.steps::before{content:"";position:absolute;top:42px;left:12%;right:12%;height:2px;background:repeating-linear-gradient(90deg,var(--lavender) 0 8px,transparent 8px 16px);z-index:0}
-@media (max-width:820px){.steps{grid-template-columns:1fr}.steps::before{display:none}}
-.step{position:relative;background:#fff;border:1px solid var(--line);border-radius:20px;padding:32px 24px;text-align:center;z-index:1;transition:transform .3s}
-.step:hover{transform:translateY(-6px)}
-.step .circle{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;margin:0 auto 18px;font-family:var(--serif);font-size:24px;font-weight:700;color:#fff}
-.step:nth-child(1) .circle{background:var(--coral)}
-.step:nth-child(2) .circle{background:var(--sky)}
-.step:nth-child(3) .circle{background:var(--lavender)}
-.step h3{font-size:20px;margin-bottom:10px}
-.step p{font-size:14.5px}
-
-/* AI */
-.ai{background:var(--dark);color:#fff;border-radius:32px;margin:60px 24px;padding:80px 0;position:relative;overflow:hidden}
-.ai::before{content:"";position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(155,124,255,.25),transparent 70%)}
-.ai::after{content:"";position:absolute;bottom:-120px;left:-80px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(74,168,255,.18),transparent 70%)}
-.ai .container{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-@media (max-width:920px){.ai .container{grid-template-columns:1fr}}
-.ai h2{color:#fff;font-size:clamp(32px,4.2vw,48px);line-height:1.1}
-.ai h2 em{color:#c9b8ff;font-style:italic;font-weight:600}
-.ai p{color:#a8aec0;margin-top:14px;font-size:17px}
-.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
-.chip{padding:9px 15px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
-.chip .glow{width:8px;height:8px;border-radius:50%;background:var(--lavender);box-shadow:0 0 12px var(--lavender)}
-.chat{background:#13162a;border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:22px;box-shadow:0 30px 80px -30px rgba(0,0,0,.6)}
-.msg{display:flex;gap:12px;margin-bottom:14px}
-.msg .av{width:34px;height:34px;border-radius:10px;background:var(--lavender);display:grid;place-items:center;font-weight:700;font-size:12px;flex-shrink:0;color:#fff}
-.msg.user .av{background:#2a2f4a}
-.bub{background:rgba(255,255,255,.05);padding:12px 14px;border-radius:14px;font-size:14px;line-height:1.55;color:#e6e8f0}
-.msg.user .bub{background:rgba(155,124,255,.18);color:#fff}
-.bub strong{color:#fff}
-
-/* PRICING */
-.pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:24px;max-width:900px;margin:0 auto}
-.plan{position:relative;background:#fff;border:1px solid var(--line);border-radius:24px;padding:38px;transition:transform .3s, box-shadow .3s}
-.plan:hover{transform:translateY(-6px);box-shadow:0 30px 60px -25px rgba(15,23,42,.15)}
-.plan.best{border:2px solid var(--lavender);background:linear-gradient(180deg,var(--lavender-soft) 0%,#fff 35%);box-shadow:0 30px 70px -25px rgba(155,124,255,.4)}
-.badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--lavender);color:#fff;font-size:12px;font-weight:700;padding:7px 16px;border-radius:999px;letter-spacing:.05em;white-space:nowrap}
-.plan h3{font-size:22px}
-.price{margin:18px 0 6px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.price .now{font-family:var(--serif);font-size:48px;font-weight:700;color:var(--ink)}
-.price .per{color:var(--muted);font-size:15px}
-.price-old{color:var(--muted);text-decoration:line-through;font-size:14px}
-.save{display:inline-block;margin-top:6px;font-size:12px;font-weight:700;color:var(--mint);background:var(--mint-soft);padding:5px 11px;border-radius:999px}
-.plan ul{list-style:none;padding:0;margin:24px 0;display:flex;flex-direction:column;gap:11px}
-.plan li{font-size:14.5px;color:var(--ink-2);display:flex;gap:10px;align-items:flex-start}
-.plan li::before{content:"✓";color:var(--lavender);font-weight:700;flex-shrink:0}
-.plan .btn{width:100%}
-
-/* TESTIMONIALS */
-.t-wrap{background:var(--peach-soft);padding:100px 0}
-.testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px}
-.tc{background:#fff;border-radius:20px;padding:30px;border:1px solid var(--line);transition:transform .3s, box-shadow .3s}
-.tc:hover{transform:translateY(-6px);box-shadow:0 24px 50px -20px rgba(15,23,42,.16)}
-.stars{color:var(--peach);font-size:16px;letter-spacing:3px;margin-bottom:14px}
-.quote{font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.5;color:var(--ink);margin-bottom:22px}
-.who{display:flex;align-items:center;gap:12px}
-.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff}
-.who .n{font-weight:600;font-size:14.5px;color:var(--ink)}
-.who .c{font-size:12.5px;color:var(--muted)}
-
-/* CTA BANNER */
-.cta-banner{background:linear-gradient(135deg,var(--lavender-soft),var(--coral-soft));border-radius:32px;margin:0 24px;padding:80px 24px;text-align:center}
-.cta-banner h2{font-size:clamp(32px,4.6vw,52px);line-height:1.08;max-width:760px;margin:0 auto}
-.cta-banner h2 em{font-style:italic;color:var(--coral);font-weight:600}
-.cta-banner p{margin:18px auto 0;font-size:17px;max-width:560px;color:var(--ink-2)}
-.cta-banner .btn{margin-top:32px;padding:16px 32px;font-size:16px}
-.cta-banner .price-note{margin-top:18px;font-size:13.5px;color:var(--muted)}
-
-/* FOOTER */
-footer{background:var(--dark);color:#a8aec0;padding:70px 0 30px;margin-top:80px}
-.foot-grid{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:40px;margin-bottom:50px}
-@media (max-width:820px){.foot-grid{grid-template-columns:1fr 1fr;gap:30px}}
-.foot-brand p{margin-top:14px;font-size:14px;color:#a8aec0;max-width:280px}
-.foot-col h4{font-family:var(--sans);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#fff;font-weight:700;margin-bottom:16px}
-.foot-col a{display:block;font-size:14px;color:#a8aec0;padding:6px 0;transition:color .2s}
-.foot-col a:hover{color:#fff}
-.socials{display:flex;gap:10px;margin-top:18px}
-.socials a{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);display:grid;place-items:center;color:#fff;font-size:14px;transition:background .2s}
-.socials a:hover{background:rgba(155,124,255,.3)}
-.foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:13px}
-.foot-bottom .heart{color:var(--coral)}
-`;
-
-const modules = [
-  { c: "lav", n: "01", t: "Website Management", ico: "◐", d: "Launch and manage your site from one place.", tags: ["Templates", "Website Settings", "Website Admin"] },
-  { c: "sky", n: "02", t: "Lead Management", ico: "◇", d: "Capture, nurture, and convert leads end to end.", tags: ["Pipelines", "Form Builder", "Lead Dashboards", "Signup Leads", "Task Reminders", "To-Do List", "Appointments", "AI Guidance"] },
-  { c: "peach", n: "03", t: "Call Management", ico: "☏", d: "AI-powered telephony with full visibility.", tags: ["AI Call Assistant", "Call Overview", "Call Reports", "Call Recordings", "AI Call Summary"] },
-  { c: "coral", n: "04", t: "Social Media", ico: "✦", d: "Reach customers everywhere they spend time.", tags: ["WhatsApp", "Instagram", "Facebook", "SEO/GEO"] },
-  { c: "mint", n: "05", t: "Employee Management", ico: "❖", d: "Run your team with clarity and accountability.", tags: ["Access Profiles", "Employee Tracking", "Employee Performance", "Timesheet", "Attendance", "Become a Partner"] },
-  { c: "sage", n: "06", t: "Finance Management", ico: "₹", d: "Invoice, track, and reconcile in one ledger.", tags: ["Invoices", "Product Management", "Customers", "Tax Invoices", "Transaction Management"] },
+const services = [
+  { icon: Code2, title: "Web Development", desc: "Blazing-fast, scalable web apps built with modern stacks." },
+  { icon: Smartphone, title: "App Development", desc: "Native-feel iOS & Android apps users love to open." },
+  { icon: PenTool, title: "UI / UX Design", desc: "Interfaces that convert — designed with intent and clarity." },
+  { icon: Palette, title: "Branding", desc: "Identities that make your startup unmistakable." },
+  { icon: Megaphone, title: "Digital Marketing", desc: "Data-driven growth across SEO, paid and content." },
+  { icon: Bot, title: "AI Automation", desc: "Custom AI agents that do real work for your business." },
+  { icon: Briefcase, title: "Business Consulting", desc: "Strategy, ops and go-to-market guidance from operators." },
+  { icon: Cloud, title: "Cloud Solutions", desc: "Secure, observable infra on AWS, GCP & Cloudflare." },
 ];
 
-const reviews = [
-  { s: 5, q: "StartBusiness replaced four tools for us. Our sales team finally lives in one place.", n: "Aarav Mehta", c: "Founder, Brightleaf Studio", i: "AM", color: "var(--coral)" },
-  { s: 5, q: "The AI call summaries alone save us hours every week. Worth it from day one.", n: "Priya Sharma", c: "Head of Sales, NovaCRM", i: "PS", color: "var(--lavender)" },
-  { s: 5, q: "Beautifully designed and genuinely useful. Onboarding our 20-person team took an afternoon.", n: "Rahul Verma", c: "COO, Finch & Co.", i: "RV", color: "var(--sky)" },
+const features = [
+  { icon: Zap, title: "Fast Delivery", desc: "Ship in weeks, not quarters — without sacrificing quality." },
+  { icon: Users, title: "Expert Team", desc: "Senior engineers, designers and strategists only." },
+  { icon: ShieldCheck, title: "Secure Solutions", desc: "SOC2-ready practices baked into every build." },
+  { icon: Cpu, title: "Modern Technology", desc: "React, TypeScript, edge compute and AI by default." },
+  { icon: Headphones, title: "24/7 Support", desc: "A real human on Slack, not a ticket queue." },
+  { icon: Layers, title: "Scalable Architecture", desc: "Built for your first 100 and your millionth user." },
 ];
+
+const projects = [
+  { tag: "SaaS", title: "Lumen Analytics", desc: "A 0→1 analytics platform that closed $4.2M ARR in 9 months.", color: "from-indigo-500/30 to-violet-500/10" },
+  { tag: "Fintech", title: "Northwave Bank", desc: "Reimagined onboarding — cut drop-off by 41%.", color: "from-sky-500/30 to-blue-500/10" },
+  { tag: "AI", title: "Helio Agent", desc: "Voice AI for clinics handling 12k+ calls per week.", color: "from-fuchsia-500/30 to-purple-500/10" },
+  { tag: "E-commerce", title: "Atlas Goods", desc: "Headless store with a 2.8s LCP and +63% conversion.", color: "from-emerald-500/30 to-teal-500/10" },
+  { tag: "SaaS", title: "Forge CRM", desc: "Custom CRM replacing 6 internal tools for a 400-person co.", color: "from-amber-500/30 to-orange-500/10" },
+  { tag: "Brand", title: "Mira Studio", desc: "Identity, site and product launch in 5 weeks flat.", color: "from-rose-500/30 to-pink-500/10" },
+];
+const projectCats = ["All", "SaaS", "Fintech", "AI", "E-commerce", "Brand"];
+
+const pricing = [
+  {
+    name: "Starter",
+    monthly: 1499,
+    yearly: 14990,
+    desc: "For founders validating an idea or shipping an MVP.",
+    features: ["Landing page or MVP", "Brand starter kit", "Up to 3 revisions", "Email support", "2-week delivery"],
+  },
+  {
+    name: "Professional",
+    monthly: 3999,
+    yearly: 39990,
+    desc: "For funded startups scaling product and growth.",
+    features: ["Full web/app build", "UI/UX + brand system", "Unlimited revisions", "Priority Slack support", "SEO + analytics", "AI integrations"],
+    popular: true,
+  },
+  {
+    name: "Enterprise",
+    monthly: 9999,
+    yearly: 99990,
+    desc: "For teams that need a senior squad embedded.",
+    features: ["Dedicated product squad", "Cloud architecture", "SOC2-ready setup", "24/7 SLA support", "Quarterly strategy", "Custom integrations"],
+  },
+];
+
+const testimonials = [
+  { name: "Aarav Mehta", role: "CEO, Lumen Analytics", text: "Nova rebuilt our product in 7 weeks. Our investors literally clapped on the demo call.", rating: 5 },
+  { name: "Sofia Reyes", role: "Founder, Mira Studio", text: "The most thoughtful design team I've ever worked with. Our brand finally matches our ambition.", rating: 5 },
+  { name: "Daniel Park", role: "CTO, Northwave", text: "Senior engineers, clean code, and zero drama. They feel like part of our team.", rating: 5 },
+  { name: "Priya Shah", role: "Head of Growth, Atlas", text: "Our conversion jumped 63% the month after launch. The site pays for itself weekly.", rating: 5 },
+  { name: "Liam O'Connor", role: "VP Product, Forge", text: "They replaced six tools with one beautiful CRM. Onboarding now takes minutes.", rating: 5 },
+];
+
+const team = [
+  { name: "Elena Vasquez", role: "Founder & CEO", initials: "EV" },
+  { name: "Marcus Chen", role: "Head of Engineering", initials: "MC" },
+  { name: "Aisha Khan", role: "Design Director", initials: "AK" },
+  { name: "Jonas Weber", role: "Head of AI", initials: "JW" },
+];
+
+const process = [
+  { icon: Sparkles, title: "Discovery", desc: "We dig into your business, users and goals." },
+  { icon: PenTool, title: "Planning", desc: "Scope, roadmap and success metrics defined." },
+  { icon: Palette, title: "Design", desc: "Interfaces and brand crafted in high fidelity." },
+  { icon: Code2, title: "Development", desc: "Senior engineers build, test and harden." },
+  { icon: Rocket, title: "Launch", desc: "We ship, monitor and celebrate with you." },
+  { icon: Headphones, title: "Support", desc: "Ongoing iteration, optimization and care." },
+];
+
+const faqs = [
+  { q: "How quickly can we start?", a: "Most engagements kick off within 5 business days of signing. Discovery starts the same week." },
+  { q: "Do you work with non-technical founders?", a: "Absolutely — about 60% of our clients are first-time founders. We translate strategy into product." },
+  { q: "What does pricing actually include?", a: "Design, development, project management and post-launch support are all included. No surprise invoices." },
+  { q: "Can you take over an existing project?", a: "Yes. We do a free 1-week audit to identify risks before committing to a takeover." },
+  { q: "Do you offer equity or revenue-share deals?", a: "For exceptional teams, yes. Reach out and let's talk." },
+];
+
+const stats = [
+  { value: 240, suffix: "+", label: "Projects Shipped" },
+  { value: 120, suffix: "+", label: "Happy Clients" },
+  { value: 9, suffix: " yrs", label: "Of Experience" },
+  { value: 38, suffix: "M+", label: "Revenue Driven" },
+];
+
+const logos = ["Lumen", "Northwave", "Helio", "Atlas", "Forge", "Mira", "Quanta", "Vertex"];
+
+/* ---------------- COMPONENTS ---------------- */
+
+function useTheme() {
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  useEffect(() => {
+    const saved = (typeof window !== "undefined" && localStorage.getItem("nova-theme")) as
+      | "dark"
+      | "light"
+      | null;
+    const initial = saved ?? "dark";
+    setTheme(initial);
+    document.documentElement.classList.toggle("dark", initial === "dark");
+  }, []);
+  const toggle = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    document.documentElement.classList.toggle("dark", next === "dark");
+    localStorage.setItem("nova-theme", next);
+  };
+  return { theme, toggle };
+}
+
+function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const start = performance.now();
+    const dur = 1400;
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setVal(Math.floor(eased * to));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [to]);
+  return (
+    <span>
+      {val}
+      {suffix}
+    </span>
+  );
+}
+
+function Nav({ theme, toggle }: { theme: string; toggle: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  const links = [
+    ["Services", "#services"],
+    ["Work", "#work"],
+    ["Pricing", "#pricing"],
+    ["Process", "#process"],
+    ["Contact", "#contact"],
+  ];
+  return (
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? "py-2" : "py-4"}`}
+    >
+      <div
+        className={`mx-auto flex max-w-7xl items-center justify-between rounded-2xl px-4 md:px-6 transition-all duration-300 ${scrolled ? "glass-strong shadow-lg" : "bg-transparent"}`}
+        style={{ marginInline: "1rem" }}
+      >
+        <a href="#top" className="flex items-center gap-2 py-3">
+          <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white">
+            <Sparkles className="h-4 w-4" />
+          </div>
+          <span className="font-display text-lg font-bold tracking-tight">Nova</span>
+        </a>
+
+        <nav className="hidden items-center gap-7 md:flex">
+          {links.map(([label, href]) => (
+            <a
+              key={href}
+              href={href}
+              className="text-sm font-medium text-foreground/70 transition-colors hover:text-foreground"
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggle}
+            aria-label="Toggle theme"
+            className="grid h-9 w-9 place-items-center rounded-full border border-foreground/10 text-foreground/70 hover:text-foreground hover:bg-foreground/5 transition"
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+          <Button asChild className="hidden md:inline-flex bg-gradient-to-r from-indigo-500 to-violet-600 text-white hover:opacity-90">
+            <a href="#contact">
+              Get Started <ArrowRight className="ml-1 h-4 w-4" />
+            </a>
+          </Button>
+          <button
+            onClick={() => setOpen((o) => !o)}
+            className="md:hidden grid h-9 w-9 place-items-center rounded-full border border-foreground/10"
+            aria-label="Menu"
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden mx-4 mt-2 glass-strong rounded-2xl p-4 flex flex-col gap-3"
+          >
+            {links.map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="text-sm font-medium text-foreground/80 py-2"
+              >
+                {label}
+              </a>
+            ))}
+            <Button asChild className="bg-gradient-to-r from-indigo-500 to-violet-600 text-white">
+              <a href="#contact" onClick={() => setOpen(false)}>Get Started</a>
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+}
+
+function Section({
+  id,
+  children,
+  className = "",
+}: {
+  id?: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section id={id} className={`relative mx-auto max-w-7xl px-5 md:px-8 py-24 md:py-32 ${className}`}>
+      {children}
+    </section>
+  );
+}
+
+function FadeIn({
+  children,
+  delay = 0,
+  y = 24,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  y?: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1], delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ---------------- PAGE ---------------- */
 
 function Index() {
+  const { theme, toggle } = useTheme();
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 24, mass: 0.2 });
+  const [showTop, setShowTop] = useState(false);
+  const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
+  const [filter, setFilter] = useState("All");
+
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 600);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const filtered = filter === "All" ? projects : projects.filter((p) => p.tag === filter);
+
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.addEventListener('scroll',()=>{
-              const n=document.querySelector('.nav');
-              if(!n)return;
-              if(window.scrollY>20)n.classList.add('scrolled');else n.classList.remove('scrolled');
-            });
-            window.addEventListener('DOMContentLoaded',()=>{
-              const ham=document.querySelector('.hamburger');
-              const mob=document.querySelector('.mob');
-              if(ham&&mob){ham.addEventListener('click',()=>mob.classList.toggle('open'));
-                mob.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mob.classList.remove('open')));
-              }
-            });
-          `,
-        }}
-      />
+    <div id="top" className="relative min-h-screen overflow-hidden bg-background text-foreground font-sans">
+      {/* Scroll progress */}
+      <motion.div className="scroll-progress" style={{ scaleX: progress }} />
 
-      <nav className="nav">
-        <div className="container nav-inner">
-          <a href="#top" className="brand"><span className="logo" />StartBusiness<span>.ltd</span></a>
-          <div className="nav-links">
-            <a href="#features">Features</a>
-            <a href="#how">How It Works</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#reviews">Reviews</a>
-            <a href="#contact">Contact</a>
-          </div>
-          <div className="nav-cta">
-            <a href="#" className="btn btn-ghost">Login</a>
-            <a href="#pricing" className="btn btn-primary">Get Started</a>
-            <button className="hamburger" aria-label="Menu"><span /><span /><span /></button>
-          </div>
-        </div>
-        <div className="mob">
-          <a href="#features">Features</a>
-          <a href="#how">How It Works</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#reviews">Reviews</a>
-          <a href="#contact">Contact</a>
-          <a href="#">Login</a>
-        </div>
-      </nav>
+      <Nav theme={theme} toggle={toggle} />
 
-      <header id="top" className="hero">
-        <div className="container hero-grid">
-          <div>
-            <span className="eyebrow">Manage Everything. From One Place.</span>
-            <h1>Your Entire Business. <em>One Beautiful</em> Platform.</h1>
-            <p className="lead">
-              From leads to invoices, calls to social media — manage everything your business needs from a single, intelligent dashboard.
+      {/* HERO */}
+      <section className="relative isolate pt-36 pb-24 md:pt-44 md:pb-32">
+        <div className="absolute inset-0 bg-grid" />
+        <div className="blob bg-indigo-500 animate-drift left-[-10%] top-[-10%] h-[480px] w-[480px]" />
+        <div className="blob bg-violet-500 animate-drift right-[-10%] top-[10%] h-[420px] w-[420px]" style={{ animationDelay: "-4s" }} />
+        <div className="blob bg-cyan-400 animate-drift left-[30%] bottom-[-20%] h-[420px] w-[420px]" style={{ animationDelay: "-8s" }} />
+
+        <div className="relative mx-auto max-w-7xl px-5 md:px-8">
+          <FadeIn>
+            <div className="mx-auto mb-6 flex w-fit items-center gap-2 rounded-full border border-foreground/10 glass px-4 py-1.5 text-xs font-medium text-foreground/70">
+              <CircleDot className="h-3 w-3 text-emerald-500" />
+              Accepting 4 new clients for Q1
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.05}>
+            <h1 className="font-display mx-auto max-w-4xl text-center text-5xl font-bold leading-[1.05] tracking-tight md:text-7xl">
+              Launch, Scale & Grow Your{" "}
+              <span className="text-gradient">Business Digitally</span>
+            </h1>
+          </FadeIn>
+
+          <FadeIn delay={0.15}>
+            <p className="mx-auto mt-6 max-w-2xl text-center text-base text-foreground/65 md:text-lg">
+              Nova is a premium digital studio for ambitious founders. From idea to scale —
+              we design, engineer and grow the products investors and users love.
             </p>
-            <div className="hero-cta">
-              <a href="#pricing" className="btn btn-primary">Start Free Trial</a>
-              <a href="#" className="btn btn-ghost">▶ Watch Demo</a>
+          </FadeIn>
+
+          <FadeIn delay={0.25}>
+            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Button asChild size="lg" className="h-12 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 px-7 text-white hover:opacity-90">
+                <a href="#contact">Get Started <ArrowRight className="ml-1 h-4 w-4" /></a>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="h-12 rounded-full border-foreground/15 px-7">
+                <a href="#contact">Book Consultation</a>
+              </Button>
             </div>
-            <div className="proof">
-              <div className="dots"><span /><span /><span /><span /></div>
-              Trusted by 500+ growing businesses across India
-            </div>
-          </div>
-          <div className="dash-wrap">
-            <div className="floaty a"><div className="pill-ico" style={{ background: "var(--mint)" }}>✓</div>New lead captured</div>
-            <div className="floaty b"><div className="pill-ico" style={{ background: "var(--lavender)" }}>★</div>AI summary ready</div>
-            <div className="dash">
-              <div className="dash-head">
-                <div>
-                  <div className="dash-title">Business Overview</div>
-                  <div className="dash-sub">Today · Live</div>
+          </FadeIn>
+
+          {/* Dashboard mockup */}
+          <FadeIn delay={0.35} y={40}>
+            <div className="relative mx-auto mt-16 max-w-5xl">
+              <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-tr from-indigo-500/30 via-violet-500/20 to-cyan-400/30 blur-2xl" />
+              <div className="animate-float overflow-hidden rounded-2xl border border-foreground/10 glass-strong shadow-2xl">
+                {/* Top bar */}
+                <div className="flex items-center justify-between border-b border-foreground/10 px-5 py-3">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
+                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
+                  </div>
+                  <span className="text-xs text-foreground/50">nova.app / dashboard</span>
+                  <div className="w-12" />
                 </div>
-                <div className="dot" />
+                {/* Body */}
+                <div className="grid gap-4 p-5 md:grid-cols-3">
+                  {[
+                    { label: "Revenue", value: "$482,310", trend: "+18.2%", icon: TrendingUp },
+                    { label: "Active Users", value: "12,840", trend: "+6.4%", icon: Users },
+                    { label: "Conversion", value: "4.92%", trend: "+1.1%", icon: Award },
+                  ].map((c) => (
+                    <div key={c.label} className="rounded-xl border border-foreground/10 bg-foreground/[0.02] p-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-foreground/60">{c.label}</span>
+                        <c.icon className="h-4 w-4 text-indigo-400" />
+                      </div>
+                      <div className="mt-2 font-display text-2xl font-semibold">{c.value}</div>
+                      <div className="mt-1 text-xs text-emerald-500">{c.trend}</div>
+                    </div>
+                  ))}
+                  {/* Chart */}
+                  <div className="md:col-span-3 rounded-xl border border-foreground/10 bg-foreground/[0.02] p-4">
+                    <div className="mb-3 flex items-center justify-between">
+                      <span className="text-sm font-semibold">Growth this quarter</span>
+                      <div className="flex gap-1">
+                        {["1W", "1M", "3M", "1Y"].map((p, i) => (
+                          <span
+                            key={p}
+                            className={`rounded-md px-2 py-0.5 text-[10px] ${i === 2 ? "bg-indigo-500/20 text-indigo-300" : "text-foreground/50"}`}
+                          >
+                            {p}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <svg viewBox="0 0 600 140" className="h-32 w-full">
+                      <defs>
+                        <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+                          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.6" />
+                          <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+                        </linearGradient>
+                      </defs>
+                      <path
+                        d="M0,100 C60,80 100,110 160,70 C220,30 260,90 320,60 C380,30 420,80 480,40 C540,10 580,30 600,20 L600,140 L0,140 Z"
+                        fill="url(#g1)"
+                      />
+                      <path
+                        d="M0,100 C60,80 100,110 160,70 C220,30 260,90 320,60 C380,30 420,80 480,40 C540,10 580,30 600,20"
+                        fill="none"
+                        stroke="#8b5cf6"
+                        strokeWidth="2.5"
+                      />
+                    </svg>
+                  </div>
+                </div>
               </div>
-              <div className="dash-grid">
-                <div className="metric coral"><div className="k">Revenue</div><div className="v">₹4,82,300</div><div className="d">▲ 12.4%</div></div>
-                <div className="metric sky"><div className="k">Active Leads</div><div className="v">128</div><div className="d">▲ 8.1%</div></div>
-                <div className="metric lav"><div className="k">Calls Today</div><div className="v">47</div><div className="d">▲ 5.3%</div></div>
-                <div className="metric mint"><div className="k">Attendance</div><div className="v">96%</div><div className="d">▲ 1.2%</div></div>
-              </div>
-              <div className="bars">
-                {[40, 65, 50, 78, 60, 88, 72, 95, 70, 82, 90, 100].map((h, i) => (
-                  <span key={i} style={{ height: `${h}%` }} />
+            </div>
+          </FadeIn>
+
+          {/* Logos marquee */}
+          <FadeIn delay={0.5}>
+            <p className="mt-16 text-center text-xs uppercase tracking-widest text-foreground/45">
+              Trusted by teams building the future
+            </p>
+            <div className="mt-6 overflow-hidden">
+              <div className="animate-marquee flex w-max gap-12 opacity-60">
+                {[...logos, ...logos].map((l, i) => (
+                  <span key={i} className="font-display text-xl font-semibold text-foreground/60">
+                    {l}
+                  </span>
                 ))}
               </div>
             </div>
-          </div>
+          </FadeIn>
         </div>
-      </header>
+      </section>
 
-      <section id="features">
-        <div className="container">
-          <div className="section-head">
-            <h2>Everything You Need. <em>Nothing</em> You Don't.</h2>
-            <p>Six powerful modules, one seamless platform.</p>
+      {/* ABOUT + STATS */}
+      <Section id="about">
+        <div className="grid gap-12 md:grid-cols-2 md:items-center">
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400">About Nova</p>
+            <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+              We help founders turn bold ideas into real businesses.
+            </h2>
+            <p className="mt-5 text-foreground/65 md:text-lg">
+              Nova is a senior-only team of designers, engineers and strategists. We've shipped
+              products for YC startups, public companies and indie founders. Our mission is simple:
+              make the work that founders dream about, possible.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-xl border border-foreground/10 p-4">
+                <p className="text-xs uppercase text-foreground/50">Mission</p>
+                <p className="mt-1 text-sm">Ship work that meaningfully moves a business forward.</p>
+              </div>
+              <div className="rounded-xl border border-foreground/10 p-4">
+                <p className="text-xs uppercase text-foreground/50">Vision</p>
+                <p className="mt-1 text-sm">A world where founders are bottlenecked only by ambition.</p>
+              </div>
+            </div>
+          </FadeIn>
+          <FadeIn delay={0.15}>
+            <div className="grid grid-cols-2 gap-4">
+              {stats.map((s) => (
+                <div
+                  key={s.label}
+                  className="lift rounded-2xl border border-foreground/10 glass p-6"
+                >
+                  <div className="font-display text-4xl font-bold text-gradient">
+                    <Counter to={s.value} suffix={s.suffix} />
+                  </div>
+                  <p className="mt-1 text-sm text-foreground/60">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </FadeIn>
+        </div>
+      </Section>
+
+      {/* SERVICES */}
+      <Section id="services">
+        <FadeIn>
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400">Services</p>
+            <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+              Everything you need to ship and scale.
+            </h2>
+            <p className="mt-4 text-foreground/65">
+              One senior team — design, engineering, growth and AI under one roof.
+            </p>
           </div>
-          <div className="modules">
-            {modules.map((m) => (
-              <div key={m.n} className={`mod ${m.c}`}>
-                <div className="num">MODULE {m.n}</div>
-                <div className="ico">{m.ico}</div>
-                <h3>{m.t}</h3>
-                <p>{m.d}</p>
-                <div className="tags">
-                  {m.tags.map((t) => <span key={t} className="tag">{t}</span>)}
+        </FadeIn>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {services.map((s, i) => (
+            <FadeIn key={s.title} delay={i * 0.04}>
+              <div className="lift group h-full rounded-2xl border border-foreground/10 glass p-6">
+                <div className="grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-violet-500/20 text-indigo-400 ring-1 ring-indigo-500/20 group-hover:from-indigo-500 group-hover:to-violet-600 group-hover:text-white transition">
+                  <s.icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-display mt-4 text-lg font-semibold">{s.title}</h3>
+                <p className="mt-1.5 text-sm text-foreground/60">{s.desc}</p>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+
+      {/* FEATURES */}
+      <Section id="features" className="!py-20">
+        <FadeIn>
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400">Why Nova</p>
+            <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+              Built for ambitious teams.
+            </h2>
+          </div>
+        </FadeIn>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f, i) => (
+            <FadeIn key={f.title} delay={i * 0.05}>
+              <div className="lift h-full rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-6">
+                <div className="flex items-center gap-3">
+                  <div className="grid h-10 w-10 place-items-center rounded-lg bg-indigo-500/15 text-indigo-400">
+                    <f.icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-display text-lg font-semibold">{f.title}</h3>
+                </div>
+                <p className="mt-3 text-sm text-foreground/65">{f.desc}</p>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+
+      {/* WORK */}
+      <Section id="work">
+        <FadeIn>
+          <div className="flex flex-col items-center text-center md:flex-row md:items-end md:justify-between md:text-left">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400">Selected Work</p>
+              <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+                Products our clients are proud of.
+              </h2>
+            </div>
+            <div className="mt-6 flex flex-wrap justify-center gap-2 md:mt-0">
+              {projectCats.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setFilter(c)}
+                  className={`rounded-full border px-4 py-1.5 text-xs font-medium transition ${
+                    filter === c
+                      ? "border-indigo-500/40 bg-indigo-500/15 text-indigo-300"
+                      : "border-foreground/10 text-foreground/60 hover:text-foreground"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+        </FadeIn>
+
+        <motion.div layout className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {filtered.map((p) => (
+              <motion.a
+                layout
+                key={p.title}
+                href="#contact"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.4 }}
+                className="lift group relative overflow-hidden rounded-2xl border border-foreground/10 bg-foreground/[0.02]"
+              >
+                <div className={`relative h-52 bg-gradient-to-br ${p.color} overflow-hidden`}>
+                  <div className="absolute inset-0 bg-grid opacity-40" />
+                  <div className="absolute bottom-3 left-3 rounded-full glass px-3 py-1 text-[10px] uppercase tracking-wider">
+                    {p.tag}
+                  </div>
+                  <div className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full glass">
+                    <ArrowRight className="h-4 w-4" />
+                  </div>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-display text-lg font-semibold">{p.title}</h3>
+                  <p className="mt-1 text-sm text-foreground/60">{p.desc}</p>
+                </div>
+              </motion.a>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      </Section>
+
+      {/* PRICING */}
+      <Section id="pricing">
+        <FadeIn>
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400">Pricing</p>
+            <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+              Simple plans. Senior delivery.
+            </h2>
+            <div className="mt-6 inline-flex items-center gap-1 rounded-full border border-foreground/10 glass p-1">
+              {(["monthly", "yearly"] as const).map((b) => (
+                <button
+                  key={b}
+                  onClick={() => setBilling(b)}
+                  className={`relative rounded-full px-4 py-1.5 text-sm font-medium capitalize transition ${
+                    billing === b ? "text-white" : "text-foreground/60"
+                  }`}
+                >
+                  {billing === b && (
+                    <motion.span
+                      layoutId="bill"
+                      className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative">
+                    {b} {b === "yearly" && <span className="ml-1 text-[10px] opacity-80">save 17%</span>}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </FadeIn>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {pricing.map((p, i) => (
+            <FadeIn key={p.name} delay={i * 0.07}>
+              <div
+                className={`relative h-full rounded-2xl border p-7 ${
+                  p.popular
+                    ? "border-indigo-500/40 bg-gradient-to-b from-indigo-500/10 to-transparent"
+                    : "border-foreground/10 bg-foreground/[0.02]"
+                }`}
+              >
+                {p.popular && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
+                    Most popular
+                  </span>
+                )}
+                <h3 className="font-display text-lg font-semibold">{p.name}</h3>
+                <p className="mt-1 text-sm text-foreground/60">{p.desc}</p>
+                <div className="mt-5 flex items-baseline gap-1">
+                  <span className="font-display text-5xl font-bold">
+                    ${(billing === "monthly" ? p.monthly : Math.round(p.yearly / 12)).toLocaleString()}
+                  </span>
+                  <span className="text-sm text-foreground/50">/mo</span>
+                </div>
+                <p className="text-xs text-foreground/50">
+                  {billing === "yearly" ? `Billed $${p.yearly.toLocaleString()} yearly` : "Billed monthly"}
+                </p>
+                <Button
+                  asChild
+                  className={`mt-6 w-full ${
+                    p.popular
+                      ? "bg-gradient-to-r from-indigo-500 to-violet-600 text-white hover:opacity-90"
+                      : ""
+                  }`}
+                  variant={p.popular ? "default" : "outline"}
+                >
+                  <a href="#contact">Choose {p.name}</a>
+                </Button>
+                <ul className="mt-6 space-y-3">
+                  {p.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                      <span className="text-foreground/75">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+
+      {/* TESTIMONIALS */}
+      <Section id="testimonials" className="!py-20">
+        <FadeIn>
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400">Loved by founders</p>
+            <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+              Real words from real clients.
+            </h2>
+          </div>
+        </FadeIn>
+        <div className="mt-12 overflow-hidden">
+          <div className="animate-marquee flex w-max gap-5">
+            {[...testimonials, ...testimonials].map((t, i) => (
+              <div
+                key={i}
+                className="w-[340px] shrink-0 rounded-2xl border border-foreground/10 glass p-6"
+              >
+                <div className="flex gap-0.5">
+                  {Array.from({ length: t.rating }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="mt-3 text-sm text-foreground/80 leading-relaxed">"{t.text}"</p>
+                <div className="mt-5 flex items-center gap-3">
+                  <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-sm font-semibold text-white">
+                    {t.name.split(" ").map((w) => w[0]).join("")}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">{t.name}</p>
+                    <p className="text-xs text-foreground/55">{t.role}</p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section id="how" className="how-wrap">
-        <div className="container">
-          <div className="section-head">
-            <h2>How It <em>Works</em></h2>
-            <p>Get up and running in minutes, not weeks.</p>
+      {/* TEAM */}
+      <Section id="team">
+        <FadeIn>
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400">Team</p>
+            <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+              Senior operators. No juniors.
+            </h2>
           </div>
-          <div className="steps">
-            <div className="step">
-              <div className="circle">1</div>
-              <h3>Sign Up and Set Up</h3>
-              <p>Create your account and personalise your dashboard in under five minutes.</p>
-            </div>
-            <div className="step">
-              <div className="circle">2</div>
-              <h3>Connect Everything</h3>
-              <p>Bring in your team, leads, calls, and social channels with a few clicks.</p>
-            </div>
-            <div className="step">
-              <div className="circle">3</div>
-              <h3>Grow with AI</h3>
-              <p>Let AI-powered insights guide your next best action, every single day.</p>
-            </div>
-          </div>
+        </FadeIn>
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {team.map((m, i) => (
+            <FadeIn key={m.name} delay={i * 0.05}>
+              <div className="lift overflow-hidden rounded-2xl border border-foreground/10 bg-foreground/[0.02]">
+                <div className="relative h-44 bg-gradient-to-br from-indigo-500/40 to-violet-500/20">
+                  <div className="absolute inset-0 grid place-items-center">
+                    <span className="font-display text-5xl font-bold text-white/85">{m.initials}</span>
+                  </div>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-display text-lg font-semibold">{m.name}</h3>
+                  <p className="text-sm text-foreground/60">{m.role}</p>
+                  <div className="mt-3 flex gap-2 text-foreground/55">
+                    <a href="#" className="hover:text-foreground"><Twitter className="h-4 w-4" /></a>
+                    <a href="#" className="hover:text-foreground"><Linkedin className="h-4 w-4" /></a>
+                    <a href="#" className="hover:text-foreground"><Github className="h-4 w-4" /></a>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+          ))}
         </div>
-      </section>
+      </Section>
 
-      <section id="ai" style={{ padding: 0 }}>
-        <div className="ai">
-          <div className="container">
+      {/* PROCESS */}
+      <Section id="process" className="!py-24">
+        <FadeIn>
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400">Process</p>
+            <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+              From kickoff to launch.
+            </h2>
+          </div>
+        </FadeIn>
+        <div className="relative mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {process.map((p, i) => (
+            <FadeIn key={p.title} delay={i * 0.05}>
+              <div className="lift relative h-full rounded-2xl border border-foreground/10 glass p-6">
+                <div className="flex items-center justify-between">
+                  <div className="grid h-10 w-10 place-items-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white">
+                    <p.icon className="h-5 w-5" />
+                  </div>
+                  <span className="font-display text-3xl font-bold text-foreground/10">
+                    0{i + 1}
+                  </span>
+                </div>
+                <h3 className="font-display mt-4 text-lg font-semibold">{p.title}</h3>
+                <p className="mt-1 text-sm text-foreground/60">{p.desc}</p>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </Section>
+
+      {/* AI CHATBOT TEASER */}
+      <Section id="ai" className="!py-20">
+        <div className="relative overflow-hidden rounded-3xl border border-foreground/10 bg-gradient-to-br from-indigo-600/20 via-violet-600/10 to-cyan-500/10 p-8 md:p-14">
+          <div className="blob bg-violet-500 right-[-10%] top-[-30%] h-[360px] w-[360px]" />
+          <div className="relative grid gap-10 md:grid-cols-2 md:items-center">
             <div>
-              <h2>AI That Works <em>While You Sleep</em></h2>
-              <p>From summarising calls to flagging hot leads, our AI is not a chatbot bolted on — it lives inside every module, helping your team move faster with less effort.</p>
-              <div className="chips">
-                <span className="chip"><span className="glow" />AI Call Assistant</span>
-                <span className="chip"><span className="glow" />AI Call Summary</span>
-                <span className="chip"><span className="glow" />AI Lead Guidance</span>
-                <span className="chip"><span className="glow" />Smart Reminders</span>
+              <p className="text-xs font-semibold uppercase tracking-widest text-indigo-300">Nova AI</p>
+              <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+                Your business, on autopilot.
+              </h2>
+              <p className="mt-4 text-foreground/70 md:text-lg">
+                We deploy AI agents that handle support, qualify leads, draft proposals
+                and write code — wired to your stack.
+              </p>
+              <div className="mt-6 flex gap-3">
+                <Button asChild className="bg-gradient-to-r from-indigo-500 to-violet-600 text-white">
+                  <a href="#contact">See it in action</a>
+                </Button>
               </div>
             </div>
-            <div className="chat">
-              <div className="msg"><div className="av">AI</div><div className="bub"><strong>Yesterday's calls:</strong> 12 calls, 4 hot leads, 2 deals progressed. Avg call time 6m 20s.</div></div>
-              <div className="msg user"><div className="av">You</div><div className="bub">Any leads I should call today?</div></div>
-              <div className="msg"><div className="av">AI</div><div className="bub"><strong>🔥 Hot lead:</strong> Priya at Acme Co. opened your proposal twice this morning.</div></div>
-              <div className="msg user"><div className="av">You</div><div className="bub">Draft the invoice for Acme.</div></div>
-              <div className="msg"><div className="av">AI</div><div className="bub"><strong>Done.</strong> Invoice #INV-2041 for ₹2,69,550 ready. Follow-up scheduled Wed 10:00.</div></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="pricing">
-        <div className="container">
-          <div className="section-head">
-            <h2>Simple Pricing. <em>Serious</em> Value.</h2>
-            <p>Every plan includes all six modules and every feature. Pick the billing that fits you.</p>
-          </div>
-          <div className="pricing">
-            <div className="plan">
-              <h3>Monthly</h3>
-              <div className="price"><span className="now">₹899</span><span className="per">/ month</span></div>
-              <div className="price-old">₹1,000 / month</div>
-              <div className="save">Save ₹101</div>
-              <ul>
-                <li>All 6 modules included</li>
-                <li>AI features unlocked</li>
-                <li>Unlimited leads</li>
-                <li>Call recordings and summaries</li>
-                <li>Social media management</li>
-                <li>Finance and invoicing</li>
-                <li>Cancel anytime</li>
-              </ul>
-              <a href="#" className="btn btn-ghost">Start Monthly</a>
-            </div>
-            <div className="plan best">
-              <div className="badge">⭐ BEST VALUE — 40% OFF</div>
-              <h3>Yearly</h3>
-              <div className="price"><span className="now">₹5,999</span><span className="per">/ year</span></div>
-              <div className="price-old">₹10,000 / year</div>
-              <div className="save">Save ₹4,001</div>
-              <ul>
-                <li>Everything in Monthly</li>
-                <li>Priority AI support</li>
-                <li>Advanced analytics</li>
-                <li>Partner program access</li>
-                <li>Dedicated onboarding</li>
-                <li>Custom domain support</li>
-              </ul>
-              <a href="#" className="btn btn-lav">Get Yearly Deal</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="reviews" style={{ padding: 0 }}>
-        <div className="t-wrap">
-          <div className="container">
-            <div className="section-head">
-              <h2>Loved by Businesses <em>Across India</em></h2>
-              <p>From scrappy founders to scaling sales teams, StartBusiness is the operating system they choose.</p>
-            </div>
-            <div className="testimonials">
-              {reviews.map((r) => (
-                <div key={r.n} className="tc">
-                  <div className="stars">{"★".repeat(r.s)}</div>
-                  <div className="quote">"{r.q}"</div>
-                  <div className="who">
-                    <div className="avatar" style={{ background: r.color }}>{r.i}</div>
-                    <div>
-                      <div className="n">{r.n}</div>
-                      <div className="c">{r.c}</div>
-                    </div>
+            <div className="rounded-2xl border border-foreground/10 glass-strong p-5">
+              {[
+                { who: "you", text: "Summarize today's leads and draft a follow-up." },
+                { who: "ai", text: "12 new leads — 4 are high intent (Atlas, Mira, Forge, Helio). Draft sent to your inbox." },
+                { who: "you", text: "Create an invoice for Mira Studio: $4,200." },
+                { who: "ai", text: "Invoice #INV-0421 created and sent. Payment link: nova.app/i/0421" },
+              ].map((m, i) => (
+                <div key={i} className={`mb-3 flex ${m.who === "you" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${
+                      m.who === "you"
+                        ? "bg-gradient-to-r from-indigo-500 to-violet-600 text-white"
+                        : "bg-foreground/5 text-foreground/85"
+                    }`}
+                  >
+                    {m.text}
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" style={{ padding: "40px 0 60px" }}>
-        <div className="cta-banner">
-          <h2>Ready to Take Control of <em>Your Business?</em></h2>
-          <p>Join hundreds of smart businesses already growing with StartBusiness.ltd</p>
-          <a href="#pricing" className="btn btn-primary">Get Started for Free →</a>
-          <div className="price-note">₹899/month or ₹5,999/year · Cancel anytime</div>
-        </div>
-      </section>
-
-      <footer>
-        <div className="container">
-          <div className="foot-grid">
-            <div className="foot-brand">
-              <a href="#top" className="brand" style={{ color: "#fff" }}>
-                <span className="logo" />StartBusiness<span style={{ color: "var(--lavender)" }}>.ltd</span>
-              </a>
-              <p>Manage everything. From one place. The all-in-one platform for modern businesses.</p>
-              <div className="socials">
-                <a href="#" aria-label="Twitter">𝕏</a>
-                <a href="#" aria-label="Instagram">◎</a>
-                <a href="#" aria-label="LinkedIn">in</a>
-                <a href="#" aria-label="YouTube">▶</a>
+              <div className="mt-4 flex items-center gap-2 rounded-full border border-foreground/10 bg-background/40 px-3 py-2">
+                <MessageSquare className="h-4 w-4 text-foreground/50" />
+                <input
+                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-foreground/40"
+                  placeholder="Ask Nova AI anything…"
+                />
+                <button className="grid h-7 w-7 place-items-center rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 text-white">
+                  <Send className="h-3.5 w-3.5" />
+                </button>
               </div>
             </div>
-            <div className="foot-col">
-              <h4>Platform</h4>
-              <a href="#features">Features</a>
-              <a href="#ai">AI Tools</a>
-              <a href="#pricing">Pricing</a>
-              <a href="#">Integrations</a>
-            </div>
-            <div className="foot-col">
-              <h4>Company</h4>
-              <a href="#">About</a>
-              <a href="#">Careers</a>
-              <a href="#">Blog</a>
-              <a href="#">Press</a>
-            </div>
-            <div className="foot-col">
-              <h4>Support</h4>
-              <a href="#">Help Center</a>
-              <a href="#">Contact</a>
-              <a href="#">Status</a>
-              <a href="#">Community</a>
-            </div>
-            <div className="foot-col">
-              <h4>Legal</h4>
-              <a href="#">Privacy</a>
-              <a href="#">Terms</a>
-              <a href="#">Security</a>
-              <a href="#">Cookies</a>
-            </div>
-          </div>
-          <div className="foot-bottom">
-            <div>© {new Date().getFullYear()} StartBusiness.ltd — All rights reserved.</div>
-            <div>Made with <span className="heart">♥</span> in India</div>
           </div>
         </div>
+      </Section>
+
+      {/* FAQ */}
+      <Section id="faq" className="!py-24">
+        <div className="grid gap-12 md:grid-cols-[1fr_2fr]">
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400">FAQ</p>
+            <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+              Questions, answered.
+            </h2>
+            <p className="mt-4 text-foreground/65">
+              Still curious? Reach out — we usually reply within an hour.
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <Accordion type="single" collapsible className="rounded-2xl border border-foreground/10 glass px-6">
+              {faqs.map((f, i) => (
+                <AccordionItem key={i} value={`item-${i}`} className="border-foreground/10">
+                  <AccordionTrigger className="text-left text-base font-medium hover:no-underline">
+                    {f.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-foreground/65">{f.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </FadeIn>
+        </div>
+      </Section>
+
+      {/* CONTACT */}
+      <Section id="contact">
+        <div className="grid gap-10 md:grid-cols-2">
+          <FadeIn>
+            <p className="text-xs font-semibold uppercase tracking-widest text-indigo-400">Contact</p>
+            <h2 className="font-display mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+              Let's build something great.
+            </h2>
+            <p className="mt-4 text-foreground/65">
+              Tell us about your project. We'll respond within one business day.
+            </p>
+            <div className="mt-8 space-y-4 text-sm">
+              <div className="flex items-center gap-3">
+                <Mail className="h-4 w-4 text-indigo-400" />
+                <a href="mailto:hello@nova.studio" className="hover:text-foreground">hello@nova.studio</a>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone className="h-4 w-4 text-indigo-400" />
+                <a href="tel:+15551234567" className="hover:text-foreground">+1 (555) 123-4567</a>
+              </div>
+              <div className="flex items-center gap-3">
+                <MapPin className="h-4 w-4 text-indigo-400" />
+                <span>2261 Market Street, San Francisco, CA</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Building2 className="h-4 w-4 text-indigo-400" />
+                <span>Remote-first · Working hours overlap globally</span>
+              </div>
+            </div>
+            <div className="mt-8 overflow-hidden rounded-2xl border border-foreground/10">
+              <iframe
+                title="Nova HQ"
+                src="https://maps.google.com/maps?q=san+francisco&t=&z=12&ie=UTF8&iwloc=&output=embed"
+                className="h-56 w-full grayscale"
+                loading="lazy"
+              />
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.1}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                alert("Thanks — we'll be in touch soon.");
+              }}
+              className="rounded-2xl border border-foreground/10 glass p-7"
+            >
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Name" placeholder="Jane Cooper" />
+                <Field label="Email" type="email" placeholder="jane@company.com" />
+              </div>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <Field label="Company" placeholder="Acme Inc." />
+                <Field label="Budget" placeholder="$10k – $50k" />
+              </div>
+              <div className="mt-4">
+                <label className="text-xs font-medium text-foreground/70">Project details</label>
+                <textarea
+                  rows={5}
+                  placeholder="Tell us a bit about what you're building…"
+                  className="mt-1.5 w-full resize-none rounded-xl border border-foreground/10 bg-background/40 px-4 py-3 text-sm outline-none placeholder:text-foreground/40 focus:border-indigo-500/40"
+                />
+              </div>
+              <Button className="mt-6 w-full bg-gradient-to-r from-indigo-500 to-violet-600 text-white hover:opacity-90 h-11">
+                Send message <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+              <p className="mt-3 text-center text-xs text-foreground/45">
+                By submitting you agree to our privacy policy.
+              </p>
+            </form>
+          </FadeIn>
+        </div>
+      </Section>
+
+      {/* FOOTER */}
+      <footer className="relative border-t border-foreground/10 mt-10">
+        <div className="mx-auto max-w-7xl px-5 md:px-8 py-16 grid gap-10 md:grid-cols-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white">
+                <Sparkles className="h-4 w-4" />
+              </div>
+              <span className="font-display text-lg font-bold">Nova</span>
+            </div>
+            <p className="mt-3 text-sm text-foreground/60 max-w-xs">
+              A premium digital studio helping founders launch and scale.
+            </p>
+            <div className="mt-4 flex gap-3 text-foreground/55">
+              <a href="#" className="hover:text-foreground"><Twitter className="h-4 w-4" /></a>
+              <a href="#" className="hover:text-foreground"><Linkedin className="h-4 w-4" /></a>
+              <a href="#" className="hover:text-foreground"><Github className="h-4 w-4" /></a>
+            </div>
+          </div>
+          <FooterCol title="Services" items={["Web Development", "App Development", "Branding", "AI Automation"]} />
+          <FooterCol title="Company" items={["About", "Work", "Process", "Contact"]} />
+          <div>
+            <h4 className="font-display text-sm font-semibold">Newsletter</h4>
+            <p className="mt-3 text-sm text-foreground/60">Monthly insights on building great products.</p>
+            <form
+              onSubmit={(e) => { e.preventDefault(); alert("Subscribed."); }}
+              className="mt-4 flex gap-2"
+            >
+              <input
+                type="email"
+                placeholder="you@company.com"
+                className="flex-1 rounded-lg border border-foreground/10 bg-background/40 px-3 py-2 text-sm outline-none placeholder:text-foreground/40 focus:border-indigo-500/40"
+              />
+              <Button type="submit" size="sm" className="bg-gradient-to-r from-indigo-500 to-violet-600 text-white">
+                Join
+              </Button>
+            </form>
+          </div>
+        </div>
+        <div className="border-t border-foreground/10 py-6">
+          <p className="mx-auto max-w-7xl px-5 md:px-8 text-center text-xs text-foreground/50">
+            © {new Date().getFullYear()} Nova Studio. All rights reserved.
+          </p>
+        </div>
       </footer>
-    </>
+
+      {/* Floating CTA / back to top */}
+      <AnimatePresence>
+        {showTop && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            aria-label="Back to top"
+            className="fixed bottom-6 right-6 z-50 grid h-12 w-12 place-items-center rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-xl hover:scale-105 transition"
+          >
+            <ChevronUp className="h-5 w-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  type = "text",
+  placeholder,
+}: {
+  label: string;
+  type?: string;
+  placeholder?: string;
+}) {
+  return (
+    <div>
+      <label className="text-xs font-medium text-foreground/70">{label}</label>
+      <input
+        type={type}
+        placeholder={placeholder}
+        className="mt-1.5 w-full rounded-xl border border-foreground/10 bg-background/40 px-4 py-3 text-sm outline-none placeholder:text-foreground/40 focus:border-indigo-500/40"
+      />
+    </div>
+  );
+}
+
+function FooterCol({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div>
+      <h4 className="font-display text-sm font-semibold">{title}</h4>
+      <ul className="mt-3 space-y-2 text-sm">
+        {items.map((i) => (
+          <li key={i}>
+            <a href="#" className="text-foreground/60 hover:text-foreground transition">
+              {i}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
