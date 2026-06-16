@@ -3,13 +3,13 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "StartBusiness.ltd — Run Your Entire Business Smarter" },
+      { title: "Business CRM — Run Your Entire Business Smarter" },
       {
         name: "description",
         content:
           "All-in-one CRM platform with 6 modules and 30+ AI-powered features to run your business smarter.",
       },
-      { property: "og:title", content: "StartBusiness.ltd" },
+      { property: "og:title", content: "Business CRM" },
       {
         property: "og:description",
         content: "All-in-one AI CRM platform for modern businesses.",
@@ -26,6 +26,16 @@ export const Route = createFileRoute("/")({
   }),
   component: Index,
 });
+
+/** Shown in the #pricing section for both billing options */
+const PRICING_FEATURES = [
+  "Website management",
+  "Lead management",
+  "Call management",
+  "Social media",
+  "Employee management",
+  "Finance management",
+];
 
 const CSS = `
 :root{
@@ -56,7 +66,8 @@ p{color:var(--muted);line-height:1.65;margin:0}
 .nav{position:sticky;top:0;z-index:50;transition:all .3s ease;background:transparent}
 .nav.scrolled{background:rgba(255,255,255,.7);backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid rgba(15,23,42,.06)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
-.brand{font-family:var(--serif);font-weight:800;font-size:22px;letter-spacing:-0.02em}
+.brand{display:inline-flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:800;font-size:22px;letter-spacing:-0.02em}
+.brand-logo{width:40px;height:40px;border-radius:10px;object-fit:cover;flex-shrink:0}
 .brand span{color:var(--purple)}
 .nav-links{display:flex;gap:32px}
 .nav-links a{font-size:14px;color:var(--muted);font-weight:500;transition:color .2s}
@@ -195,7 +206,7 @@ const modules = [
 ];
 
 const reviews = [
-  { s: 5, q: "StartBusiness replaced four tools for us. Our sales team finally lives in one place.", n: "Aarav Mehta", c: "Founder, Brightleaf Studio", i: "AM" },
+  { s: 5, q: "Business CRM replaced four tools for us. Our sales team finally lives in one place.", n: "Aarav Mehta", c: "Founder, Brightleaf Studio", i: "AM" },
   { s: 5, q: "The AI call summaries alone save us hours every week. Worth it from day one.", n: "Priya Sharma", c: "Head of Sales, NovaCRM", i: "PS" },
   { s: 5, q: "Beautifully designed and genuinely useful. Onboarding our 20-person team took an afternoon.", n: "Rahul Verma", c: "COO, Finch & Co.", i: "RV" },
 ];
@@ -218,7 +229,10 @@ function Index() {
 
       <nav className="nav">
         <div className="container nav-inner">
-          <a href="#top" className="brand">StartBusiness<span>.ltd</span></a>
+          <a href="#top" className="brand">
+            <img src="/logo.png" alt="" className="brand-logo" width={40} height={40} />
+            Business<span> CRM</span>
+          </a>
           <div className="nav-links">
             <a href="#features">Features</a>
             <a href="#ai">AI Tools</a>
@@ -238,7 +252,7 @@ function Index() {
               Six powerful modules, thirty plus features, and AI woven into every workflow — from leads and calls to invoices and attendance. One platform to operate your entire business.
             </p>
             <div className="hero-cta">
-              <a href="#pricing" className="btn btn-purple">Start Free Trial</a>
+              <a href="#pricing" className="btn btn-purple">Start 10-day free trial</a>
               <a href="#features" className="btn btn-ghost">Explore Features</a>
             </div>
             <div className="stats">
@@ -325,7 +339,10 @@ function Index() {
         <div className="container">
           <div className="section-head">
             <h2>Simple, honest <em>pricing</em></h2>
-            <p>Every plan includes all six modules and every feature. Pick the billing that fits you.</p>
+            <p>
+              Yearly <strong>₹5,999</strong> (was ₹10,000) or monthly <strong>₹899</strong> (was ₹1,000). Same
+              platform — pick the billing that fits you.
+            </p>
           </div>
           <div className="pricing">
             <div className="plan">
@@ -334,11 +351,9 @@ function Index() {
               <div className="price-old">₹1,000 / month</div>
               <div className="save">Save ₹101</div>
               <ul>
-                <li>All 6 modules included</li>
-                <li>30+ features unlocked</li>
-                <li>AI tools and summaries</li>
-                <li>Unlimited team members</li>
-                <li>Email and chat support</li>
+                {PRICING_FEATURES.map((f) => (
+                  <li key={f}>{f}</li>
+                ))}
               </ul>
               <a href="#" className="btn btn-ghost">Choose Monthly</a>
             </div>
@@ -349,11 +364,9 @@ function Index() {
               <div className="price-old">₹10,000 / year</div>
               <div className="save">Save ₹4,001</div>
               <ul>
-                <li>All 6 modules included</li>
-                <li>30+ features unlocked</li>
-                <li>Advanced AI workflows</li>
-                <li>Unlimited team members</li>
-                <li>Priority support and onboarding</li>
+                {PRICING_FEATURES.map((f) => (
+                  <li key={`y-${f}`}>{f}</li>
+                ))}
               </ul>
               <a href="#" className="btn btn-purple">Choose Yearly</a>
             </div>
@@ -366,7 +379,7 @@ function Index() {
           <div className="container">
             <div className="section-head">
               <h2>Loved by <em>teams</em> who ship</h2>
-              <p>From scrappy founders to scaling sales teams, StartBusiness is the operating system they choose.</p>
+              <p>From scrappy founders to scaling sales teams, Business CRM is the operating system they choose.</p>
             </div>
             <div className="testimonials">
               {reviews.map((r) => (
@@ -389,14 +402,17 @@ function Index() {
 
       <footer>
         <div className="container">
-          <a href="#top" className="brand">StartBusiness<span style={{ color: "var(--purple)" }}>.ltd</span></a>
+          <a href="#top" className="brand">
+            <img src="/logo.png" alt="" className="brand-logo" width={40} height={40} />
+            Business<span style={{ color: "var(--purple)" }}> CRM</span>
+          </a>
           <div className="links">
             <a href="#features">Features</a>
             <a href="#ai">AI Tools</a>
             <a href="#pricing">Pricing</a>
             <a href="#reviews">Reviews</a>
           </div>
-          <div className="cp">© {new Date().getFullYear()} StartBusiness.ltd — Run your entire business smarter.</div>
+          <div className="cp">© {new Date().getFullYear()} Business CRM — Run your entire business smarter.</div>
         </div>
       </footer>
     </>
